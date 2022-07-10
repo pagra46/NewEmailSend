@@ -22,7 +22,7 @@ public class EmailController {
     private EmailService emailService;
 
     @GetMapping("/test")
-    @CrossOrigin(origins = "http://localhost")
+    @CrossOrigin(origins = "*")
     public String check()
     {
         return "test";

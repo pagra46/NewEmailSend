@@ -8,6 +8,7 @@
 		<version>2.6.7</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	<packaging>jar</packaging>
 	<groupId>com.example</groupId>
 	<artifactId>NewSendEmail</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -81,9 +82,100 @@
 				<artifactId>javax.json</artifactId>
 				<version>1.1</version>
 			</dependency>
-		</dependencies>
 
+			<!-- https://mvnrepository.com/artifact/com.github.eirslett/frontend-maven-plugin -->
+			<dependency>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>1.11.3</version>
+			</dependency>
+
+		</dependencies>
 	</dependencyManagement>
+<build>
+	<plugins>
+		<plugin>
+			<groupId>com.github.eirslett</groupId>
+			<artifactId>frontend-maven-plugin</artifactId>
+			<version>1.11.3</version>
+			<configuration>
+				<workingDirectory>medisin</workingDirectory>
+				<installDirectory>target</installDirectory>
+			</configuration>
+			<executions>
+				<execution>
+					<id>install node and npm</id>
+					<goals>
+						<goal>install-node-and-npm</goal>
+					</goals>
+					<configuration>
+						<nodeVersion>v16.16.0</nodeVersion>
+						<npmVersion>8.11.0</npmVersion>
+					</configuration>
+				</execution>
+				<execution>
+					<id>npm install</id>
+					<goals>
+						<goal>npm</goal>
+					</goals>
+					<configuration>
+						<arguments>install</arguments>
+					</configuration>
+				</execution>
+				<execution>
+					<id>npm run build</id>
+					<goals>
+						<goal>npm</goal>
+					</goals>
+					<configuration>
+						<arguments>run build</arguments>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
+
+		<plugin>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-maven-plugin</artifactId>
+			<version>2.0.1.RELEASE</version>
+		</plugin>
+		<plugin>
+			<!-- Build an executable JAR -->
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-jar-plugin</artifactId>
+			<version>3.1.0</version>
+			<configuration>
+				<archive>
+					<manifest>
+						<mainClass>com.example.NewSendEmail.NewSendEmailApplication</mainClass>
+					</manifest>
+				</archive>
+			</configuration>
+		</plugin>
+
+	<plugin>
+		<artifactId>maven-antrun-plugin</artifactId>
+		<executions>
+			<execution>
+				<phase>generate-resources</phase>
+				<configuration>
+					<target>
+						<copy todir="${project.build.directory}/classes/public">
+							<fileset dir="${project.basedir}/medisin/build"/>
+						</copy>
+					</target>
+				</configuration>
+				<goals>
+					<goal>run</goal>
+				</goals>
+			</execution>
+		</executions>
+	</plugin>
+	</plugins>
+</build>
+
+
+
 
 
 
